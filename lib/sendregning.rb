@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'builder'
+require 'net/http/post/multipart'
 require 'httparty'
 
 dir = Pathname(__FILE__).dirname.expand_path

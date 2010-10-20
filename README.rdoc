@@ -14,7 +14,13 @@ Now start sending invoices:
  client = Sendregning::Client.new('my@email.com', 'myawesomepassword')
 
  # Start a new email invoice
- invoice = client.new_invoice(:name => 'My Client', :zip  => '0123', :city => 'Oslo', :shipment => :email, :emailaddresses => 'my@email.com')
+ invoice = client.new_invoice(
+	:name           => 'My Client', 
+	:zip            => '0123', 
+	:city           => 'Oslo', 
+	:shipment       => :email, 
+	:emailaddresses => 'my@email.com'
+ )
 
  # Add an item
  invoice.add_line :qty => 1, :desc => 'Bananaphone', :unitPrice => '500,00'

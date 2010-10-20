@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
      "lib/sendregning/client.rb",
      "lib/sendregning/invoice.rb",
      "lib/sendregning/line.rb",
+     "sendregning.gemspec",
      "test/helper.rb",
      "test/test_sendregning.rb"
   ]

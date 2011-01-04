@@ -31,7 +31,7 @@ Now start sending invoices:
  # Get the invoice number for future reference
  id = invoice.invoiceNo
 
-Now, let's check how we're doing
+Let's check how we're doing!
 
  invoice = client.find_invoice(id)
  invoice.paid? # => true

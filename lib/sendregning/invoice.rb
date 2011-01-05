@@ -83,7 +83,7 @@ module Sendregning
 						invoice.optional do |optional|
 							@optional.each do |key, value|
 								key = key.to_sym
-								if value.kind_of?(Date) || value.kind_of(Time)
+								if value.kind_of?(Date) || value.kind_of?(Time)
 									value = value.strftime("%d.%m.%y")
 								end
 								optional.tag! key, value

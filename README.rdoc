@@ -15,11 +15,11 @@ Now start sending invoices:
 
  # Start a new email invoice
  invoice = client.new_invoice(
-	:name           => 'My Client', 
-	:zip            => '0123', 
-	:city           => 'Oslo', 
-	:shipment       => :email, 
-	:emailaddresses => 'my@email.com'
+  :name           => 'My Client', 
+  :zip            => '0123', 
+  :city           => 'Oslo', 
+  :shipment       => :email, 
+  :emailaddresses => 'my@email.com'
  )
 
  # Add an item

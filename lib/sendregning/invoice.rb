@@ -69,20 +69,18 @@ module Sendregning
 
     protected
 
+    def filter_attributes(attributes, filter)
+      attributes.dup.delete_if { |k, v| !filter.include?(k.to_sym) }
+    end
+
     def optional=(attributes)
       @optional ||= {}
-      attributes.each do |key, value|
-        @optional[key.to_sym] = value if OPTIONAL_ATTRIBUTES.include?(key.to_sym)
-      end
-      @optional
+      @optional.merge!(filter_attributes(attributes, OPTIONAL_ATTRIBUTES))
     end
 
     def shipment=(attributes)
       @shipment ||= {}
-      attributes.each do |key, value|
-        @shipment[key.to_sym] = value if SHIPMENT_ATTRIBUTES.include?(key.to_sym)
-      end
-      @shipment
+      @shipment.merge!(filter_attributes(attributes, SHIPMENT_ATTRIBUTES))
     end
 
     def method_missing(method, *args)
@@ -93,12 +91,6 @@ module Sendregning
       else
         super
       end
-    end
-
-    def xml_builder
-      xml = Builder::XmlMarkup.new(:indent=>2)
-      xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
-      xml
     end
   end
 end

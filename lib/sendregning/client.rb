@@ -29,10 +29,9 @@ module Sendregning
       self.class.post('/ws/butler.do', query_options(query))
     end
 
-    def post_xml(xml, body={})
-      body[:test] = true if @test
-      body[:xml] = xml_file(xml)
-      self.class.post('/ws/butler.do', query: body, detect_mime_type: true, basic_auth: @auth)
+    def post_xml(xml, query={})
+      query[:xml] = xml_file(xml)
+      self.class.post('/ws/butler.do', query_options(query).merge(detect_mime_type: true))
     end
 
     # Returns a list of recipients

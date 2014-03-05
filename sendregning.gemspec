@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency 'httparty',       '~> 0.13.0'
-  s.add_runtime_dependency 'builder',        '~> 3.1.0'
-  s.add_runtime_dependency 'httmultiparty',  '~> 0.3.12'
+  s.add_runtime_dependency 'builder',        '~> 3.1'
+  s.add_runtime_dependency 'httmultiparty',  '~> 0.3'
 end

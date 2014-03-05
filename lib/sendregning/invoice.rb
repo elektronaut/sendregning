@@ -1,7 +1,6 @@
 module Sendregning
 
   class Invoice
-
     OPTIONAL_ATTRIBUTES = [
       # Request
       :invoiceType, :creditedId, :orderNo, :invoiceDate, :orderNo,
@@ -57,91 +56,49 @@ module Sendregning
       state == 'paid'
     end
 
+    def shipment_mode
+      mode = (@shipment[:shipment] || :paper).to_sym
+      raise 'Invalid shipment mode!' unless SHIPMENT_MODES.keys.include?(mode)
+      SHIPMENT_MODES[mode]
+    end
+
     # Renders invoice to XML
     def to_xml(options={})
-      if options[:builder]
-        xml = options[:builder]
-      else
-        xml = Builder::XmlMarkup.new(:indent=>2)
-        xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
-      end
-      xml.invoices do |invoices|
-        invoices.invoice do |invoice|
-          invoice.name @name
-          invoice.zip  @zip
-          invoice.city @city
-
-          # Lines
-          if @lines.length > 0
-            invoice.lines do |line_builder|
-              @lines.each{|l| l.to_xml(:builder => line_builder)}
-            end
-          end
-
-          # Optional attributes
-          if @optional.length > 0
-            invoice.optional do |optional|
-              @optional.each do |key, value|
-                key = key.to_sym
-                if value.kind_of?(Date) || value.kind_of?(Time)
-                  value = value.strftime("%d.%m.%y")
-                end
-                optional.tag! key, value
-              end
-            end
-          end
-
-          # Shipment attributes
-          if @shipment.length > 0
-            invoice.shipment do |shipment|
-              shipment_mode = (@shipment[:shipment] || :paper).to_sym
-              raise 'Invalid shipment mode!' unless SHIPMENT_MODES.keys.include?(shipment_mode)
-              shipment_mode = SHIPMENT_MODES[shipment_mode]
-
-              shipment.text! shipment_mode
-              @shipment.each do |key, values|
-                key = key.to_sym
-                unless key == :shipment
-                  values = [values] unless values.kind_of?(Enumerable)
-                  shipment.tag! key do |emails|
-                    values.each{|v| emails.email v}
-                  end
-                end
-              end
-            end
-          end
-        end
-      end
+      InvoiceSerializer.build(self, options)
     end
 
     protected
 
-      def optional=(attributes)
-        @optional ||= {}
-        attributes.each do |key, value|
-          @optional[key.to_sym] = value if OPTIONAL_ATTRIBUTES.include?(key.to_sym)
-        end
-        @optional
+    def optional=(attributes)
+      @optional ||= {}
+      attributes.each do |key, value|
+        @optional[key.to_sym] = value if OPTIONAL_ATTRIBUTES.include?(key.to_sym)
       end
+      @optional
+    end
 
-      def shipment=(attributes)
-        @shipment ||= {}
-        attributes.each do |key, value|
-          @shipment[key.to_sym] = value if SHIPMENT_ATTRIBUTES.include?(key.to_sym)
-        end
-        @shipment
+    def shipment=(attributes)
+      @shipment ||= {}
+      attributes.each do |key, value|
+        @shipment[key.to_sym] = value if SHIPMENT_ATTRIBUTES.include?(key.to_sym)
       end
+      @shipment
+    end
 
-      def method_missing(method, *args)
-        if OPTIONAL_ATTRIBUTES.include?(method)
-          @optional[method]
-        elsif SHIPMENT_ATTRIBUTES.include?(method)
-          @shipping[method]
-        else
-          super
-        end
+    def method_missing(method, *args)
+      if OPTIONAL_ATTRIBUTES.include?(method)
+        @optional[method]
+      elsif SHIPMENT_ATTRIBUTES.include?(method)
+        @shipping[method]
+      else
+        super
       end
+    end
 
+    def xml_builder
+      xml = Builder::XmlMarkup.new(:indent=>2)
+      xml.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
+      xml
+    end
   end
-
 end

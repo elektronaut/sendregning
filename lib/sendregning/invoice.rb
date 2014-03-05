@@ -16,7 +16,7 @@ module Sendregning
     SHIPMENT_ATTRIBUTES = [
       :shipment, :emailaddresses, :copyaddresses
     ]
-    
+
     SHIPMENT_MODES = {
       :paper           => 'PAPER',
       :email           => 'EMAIL',
@@ -32,7 +32,7 @@ module Sendregning
       self.update(attributes)
       @lines = []
     end
-    
+
     def update(attributes={})
       @client  = attributes[:client] if attributes[:client]
       @name    = attributes[:name]   if attributes[:name]
@@ -47,12 +47,12 @@ module Sendregning
       @lines << line
       line
     end
-    
+
     # Sends an invoice
     def send!
       self.client.send_invoice(self)
     end
-    
+
     def paid?
       state == 'paid'
     end
@@ -70,7 +70,7 @@ module Sendregning
           invoice.name @name
           invoice.zip  @zip
           invoice.city @city
-          
+
           # Lines
           if @lines.length > 0
             invoice.lines do |line_builder|
@@ -115,7 +115,7 @@ module Sendregning
     end
 
     protected
-    
+
       def optional=(attributes)
         @optional ||= {}
         attributes.each do |key, value|
@@ -123,7 +123,7 @@ module Sendregning
         end
         @optional
       end
-    
+
       def shipment=(attributes)
         @shipment ||= {}
         attributes.each do |key, value|
@@ -131,17 +131,17 @@ module Sendregning
         end
         @shipment
       end
-      
+
       def method_missing(method, *args)
         if OPTIONAL_ATTRIBUTES.include?(method)
           @optional[method]
-        elsif SHIPPING_ATTRIBUTES.include?(method)
+        elsif SHIPMENT_ATTRIBUTES.include?(method)
           @shipping[method]
         else
           super
         end
       end
-    
+
   end
 
 end

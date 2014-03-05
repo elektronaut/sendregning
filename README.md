@@ -1,5 +1,7 @@
 # Sendregning
 
+[![Code Climate](https://codeclimate.com/github/elektronaut/sendregning.png)](https://codeclimate.com/github/elektronaut/sendregning)
+
 Ruby client for the SendRegning Web Service.
 
 ## Getting started

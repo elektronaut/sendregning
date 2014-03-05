@@ -42,6 +42,6 @@ Pass `test: true` to the constructor to use the test API
     client = Sendregning::Client.new('my@email.com', 'myawesomepassword', test: true)
 
 
-== Copyright
+## Copyright
 
 Copyright (c) 2010 Inge Jørgensen. See LICENSE for details.

@@ -7,9 +7,9 @@ module Sendregning
   # Usage example:
   #
   #  client = SendRegning::Client.new(my_username, my_password)
-  
+
   class Client
-    include HTTParty
+    include HTTMultiParty
 
     base_uri 'https://www.sendregning.no'
     format   :xml
@@ -18,7 +18,7 @@ module Sendregning
       @auth = {:username => username, :password => password}
       @test = true if options[:test]
     end
-    
+
     public
 
       # Performs a GET request
@@ -30,56 +30,43 @@ module Sendregning
       def post(query=nil)
         self.class.post('/ws/butler.do', query_options(query))
       end
-      
-      # Performs a POST request with an XML payload
-      def post_xml(xml, body={})
-        # Prepare the request
-        url = URI.parse("#{self.class.base_uri}/ws/butler.do")
-        body[:xml] = UploadIO.new(StringIO.new(xml), 'text/xml', 'request.xml')
-        body[:test] = true if @test
-        request = Net::HTTP::Post::Multipart.new(url.path, body)
-        request.basic_auth @auth[:username], @auth[:password]
-        
-        # Perform request
-        http = Net::HTTP.new(url.host, url.port)
-        http.use_ssl = true
-            http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        res = http.start{|http| http.request(request)}
 
-        # Parse the response
-        response = Response.new(res, self.class.parser.call(res.body, :xml))
+      def post_xml(xml, body={})
+        body[:test] = true if @test
+        body[:xml] = xml_file(xml)
+        self.class.post('/ws/butler.do', query: body, detect_mime_type: true, basic_auth: @auth)
       end
-    
+
       # Returns a list of recipients
       def recipients
         response = get(:action => 'select', :type => 'recipient')
         response['recipients']['recipient']
       end
-      
+
       # Instances a new invoice
       def new_invoice(attributes={})
         Sendregning::Invoice.new(attributes.merge({:client => self}))
       end
-      
+
       # Sends an invoice
       def send_invoice(invoice)
         response = post_xml(invoice.to_xml, {:action => 'send', :type => 'invoice'})
         parse_invoice(response['invoices']['invoice'], invoice)
       end
-      
+
       # Finds an invoice by invoice number
       def find_invoice(invoice_id)
         builder = Builder::XmlMarkup.new(:indent=>2)
         builder.instruct! :xml, :version=>"1.0", :encoding=>"UTF-8"
         request_xml = builder.select do |select|
-          select.invoiceNumbers do |numbers| 
+          select.invoiceNumbers do |numbers|
             numbers.invoiceNumber invoice_id
           end
         end
         response = post_xml(request_xml, {:action => 'select', :type => 'invoice'})
         parse_invoice(response['invoices']['invoice']) rescue nil
       end
-      
+
 
     protected
 
@@ -108,11 +95,18 @@ module Sendregning
         invoice
       end
 
+      def parse_response(body)
+        self.class.parser.call(body, :xml)
+      end
+
       # Prepares options for a request
       def query_options(query={})
         query[:test] = 'true' if @test
         {:basic_auth => @auth, :query => query}
       end
 
+      def xml_file(xml)
+        UploadIO.new(StringIO.new(xml), 'text/xml', 'request.xml')
+      end
   end
 end

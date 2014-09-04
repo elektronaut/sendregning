@@ -87,7 +87,7 @@ module Sendregning
       if OPTIONAL_ATTRIBUTES.include?(method)
         @optional[method]
       elsif SHIPMENT_ATTRIBUTES.include?(method)
-        @shipping[method]
+        @shipment[method]
       else
         super
       end

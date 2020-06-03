@@ -1,5 +1,5 @@
+# frozen_string_literal: true
+
 module Sendregning
-  unless Sendregning.const_defined?('VERSION')
-    VERSION = "0.2.1"
-  end
+  VERSION = "0.2.1" unless Sendregning.const_defined?("VERSION")
 end

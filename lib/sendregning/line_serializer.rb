@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sendregning
   class LineSerializer < Sendregning::XmlSerializer
     def build

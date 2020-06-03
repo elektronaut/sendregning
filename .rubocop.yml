@@ -1,0 +1,23 @@
+require: rubocop-rspec
+
+inherit_from:
+  - .rubocop_todo.yml
+
+AllCops:
+  NewCops: enable
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Layout/LineLength:
+  AutoCorrect: true
+  Max: 80
+
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: aligned

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sendregning
   class InvoiceSerializer < Sendregning::XmlSerializer
     def build
@@ -29,7 +31,7 @@ module Sendregning
         invoice.optional do |optional|
           item.optional.each do |key, value|
             key = key.to_sym
-            if value.kind_of?(Date) || value.kind_of?(Time)
+            if value.is_a?(Date) || value.is_a?(Time)
               value = value.strftime("%d.%m.%y")
             end
             optional.tag! key, value
@@ -44,10 +46,10 @@ module Sendregning
           shipment.text! item.shipment_mode
           item.shipment.each do |key, values|
             key = key.to_sym
-            unless key == :shipment
-              shipment.tag! key do |emails|
-                Array(values).each { |v| emails.email v }
-              end
+            next if key == :shipment
+
+            shipment.tag! key do |emails|
+              Array(values).each { |v| emails.email v }
             end
           end
         end

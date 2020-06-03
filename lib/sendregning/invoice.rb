@@ -1,5 +1,6 @@
-module Sendregning
+# frozen_string_literal: true
 
+module Sendregning
   class Invoice
     OPTIONAL_ATTRIBUTES = [
       # Request
@@ -10,29 +11,29 @@ module Sendregning
 
       # Response
       :tax, :dueDate, :dunningFee, :invoiceNo, :total, :accountNo, :orgNrSuffix, :kid, :orgNo, :interestRate, :state
-    ]
+    ].freeze
 
-    SHIPMENT_ATTRIBUTES = [
-      :shipment, :emailaddresses, :copyaddresses
-    ]
+    SHIPMENT_ATTRIBUTES = %i[
+      shipment emailaddresses copyaddresses
+    ].freeze
 
     SHIPMENT_MODES = {
-      :paper           => 'PAPER',
-      :email           => 'EMAIL',
-      :paper_and_email => 'PAPER_AND_EMAIL'
-    }
+      paper: "PAPER",
+      email: "EMAIL",
+      paper_and_email: "PAPER_AND_EMAIL"
+    }.freeze
 
     attr_accessor :client
     attr_accessor :name, :zip, :city
     attr_accessor :optional, :shipment
     attr_accessor :lines
 
-    def initialize(attributes={})
-      self.update(attributes)
+    def initialize(attributes = {})
+      update(attributes)
       @lines = []
     end
 
-    def update(attributes={})
+    def update(attributes = {})
       @client  = attributes[:client] if attributes[:client]
       @name    = attributes[:name]   if attributes[:name]
       @zip     = attributes[:zip]    if attributes[:zip]
@@ -42,35 +43,36 @@ module Sendregning
     end
 
     def add_line(line)
-      line = Sendregning::Line.new(line) unless line.kind_of?(Sendregning::Line)
+      line = Sendregning::Line.new(line) unless line.is_a?(Sendregning::Line)
       @lines << line
       line
     end
 
     # Sends an invoice
     def send!
-      self.client.send_invoice(self)
+      client.send_invoice(self)
     end
 
     def paid?
-      state == 'paid'
+      state == "paid"
     end
 
     def shipment_mode
       mode = (@shipment[:shipment] || :paper).to_sym
-      raise 'Invalid shipment mode!' unless SHIPMENT_MODES.keys.include?(mode)
+      raise "Invalid shipment mode!" unless SHIPMENT_MODES.keys.include?(mode)
+
       SHIPMENT_MODES[mode]
     end
 
     # Renders invoice to XML
-    def to_xml(options={})
+    def to_xml(options = {})
       InvoiceSerializer.build(self, options)
     end
 
     protected
 
     def filter_attributes(attributes, filter)
-      attributes.dup.delete_if { |k, v| !filter.include?(k.to_sym) }
+      attributes.dup.delete_if { |k, _v| !filter.include?(k.to_sym) }
     end
 
     def optional=(attributes)

@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Sendregning
   class XmlSerializer
     class << self
-      def build(item, options={})
+      def build(item, options = {})
         builder = options[:builder] || xml_builder
-        self.new(item, builder).build
+        new(item, builder).build
       end
 
       protected
@@ -21,17 +23,14 @@ module Sendregning
     end
 
     def build
-      raise "XmlSerializer is an abstract class, subclass and overwrite the build method"
+      raise("XmlSerializer is an abstract class, subclass and overwrite " \
+            "the build method")
     end
 
     protected
 
-    def builder
-      @builder
-    end
+    attr_reader :builder
 
-    def item
-      @item
-    end
+    attr_reader :item
   end
 end

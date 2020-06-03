@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Sendregning
   class Line
     # Quantity, as decimal. Example: '7,5'
@@ -20,21 +22,21 @@ module Sendregning
 
     attr_accessor :itemNo, :lineTaxAmount, :lineTotal
 
-    def initialize(new_attributes={})
+    def initialize(new_attributes = {})
       self.attributes = new_attributes
     end
 
     # Renders line to XML
-    def to_xml(options={})
+    def to_xml(options = {})
       LineSerializer.build(self, options)
     end
 
     protected
 
-    def attributes=(attributes={})
+    def attributes=(attributes = {})
       attributes.each do |key, value|
-        set_method = "#{key.to_s}=".to_sym
-        self.send(set_method, value) if self.respond_to?(set_method)
+        set_method = "#{key}=".to_sym
+        send(set_method, value) if respond_to?(set_method)
       end
       attributes
     end

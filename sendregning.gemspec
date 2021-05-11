@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = "inge@elektronaut.no"
   s.homepage    = "https://github.com/elektronaut/sendregning"
   s.license     = "MIT"
-  s.required_ruby_version = Gem::Requirement.new(">= 1.9.3")
+  s.required_ruby_version = ">= 2.7.0"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

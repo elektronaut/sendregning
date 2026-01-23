@@ -1,8 +1,10 @@
+---
 name: Build
 on:
   push:
     branches:
       - main
+      - develop
   pull_request:
 permissions:
   contents: write
@@ -13,18 +15,20 @@ jobs:
   rubocop-test:
     name: Rubocop
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"
     steps:
       - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0"
           bundler-cache: true
+          ruby-version: "3.4"
       - name: Check code
         run: bundle exec rubocop
 
   release-please:
     needs: [rubocop-test]
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
@@ -42,6 +46,6 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "4.0"
+          ruby-version: "3.4"
           bundler-cache: true
       - uses: rubygems/release-gem@v1

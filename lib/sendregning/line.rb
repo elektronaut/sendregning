@@ -35,10 +35,9 @@ module Sendregning
 
     def attributes=(attributes = {})
       attributes.each do |key, value|
-        set_method = "#{key}=".to_sym
+        set_method = :"#{key}="
         send(set_method, value) if respond_to?(set_method)
       end
-      attributes
     end
   end
 end

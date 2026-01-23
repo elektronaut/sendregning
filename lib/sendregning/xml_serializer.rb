@@ -29,8 +29,6 @@ module Sendregning
 
     protected
 
-    attr_reader :builder
-
-    attr_reader :item
+    attr_reader :builder, :item
   end
 end

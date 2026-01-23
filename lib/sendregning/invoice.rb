@@ -6,11 +6,13 @@ module Sendregning
       # Request
       :invoiceType, :creditedId, :orderNo, :invoiceDate, :orderNo,
       :invoiceDate, :dueDate, :orderDate, :recipientNo, :address1, :address2,
-      :country, :email, :ourRef, :yourRef, :comment, :invoiceText, :printDunningInfo,
+      :country, :email, :ourRef, :yourRef, :comment, :invoiceText,
+      :printDunningInfo,
       :itemTaxInclude,
 
       # Response
-      :tax, :dueDate, :dunningFee, :invoiceNo, :total, :accountNo, :orgNrSuffix, :kid, :orgNo, :interestRate, :state
+      :tax, :dueDate, :dunningFee, :invoiceNo, :total, :accountNo,
+      :orgNrSuffix, :kid, :orgNo, :interestRate, :state
     ].freeze
 
     SHIPMENT_ATTRIBUTES = %i[
@@ -23,10 +25,8 @@ module Sendregning
       paper_and_email: "PAPER_AND_EMAIL"
     }.freeze
 
-    attr_accessor :client
-    attr_accessor :name, :zip, :city
-    attr_accessor :optional, :shipment
-    attr_accessor :lines
+    attr_accessor :client, :name, :zip, :city, :lines
+    attr_reader :optional, :shipment
 
     def initialize(attributes = {})
       update(attributes)
@@ -93,6 +93,12 @@ module Sendregning
       else
         super
       end
+    end
+
+    def respond_to_missing?(method, include_private = false)
+      OPTIONAL_ATTRIBUTES.include?(method) ||
+        SHIPMENT_ATTRIBUTES.include?(method) ||
+        super
     end
   end
 end

@@ -12,18 +12,17 @@ Gem::Specification.new do |s|
   s.email       = "inge@elektronaut.no"
   s.homepage    = "https://github.com/elektronaut/sendregning"
   s.license     = "MIT"
-  s.required_ruby_version = ">= 2.7.0"
+  s.required_ruby_version = ">= 3.2.0"
 
   s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map do |f|
     File.basename(f)
   end
   s.require_paths = ["lib"]
 
-  s.add_runtime_dependency "builder",        "~> 3.1"
-  s.add_runtime_dependency "httmultiparty",  "~> 0.3"
-  s.add_runtime_dependency "httparty",       "~> 0.13"
+  s.add_dependency "builder",        "~> 3.1"
+  s.add_dependency "httmultiparty",  "~> 0.3"
+  s.add_dependency "httparty",       "~> 0.13"
 
-  s.add_development_dependency "rake"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

@@ -7,3 +7,6 @@ require "bundler/gem_tasks"
 
 # task default: :spec
 # task test: :spec
+
+# release-please creates the tag and the release commit.
+Rake::Task["release:source_control_push"].clear

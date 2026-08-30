@@ -24,5 +24,10 @@ Gem::Specification.new do |s|
   s.add_dependency "httmultiparty",  "~> 0.3"
   s.add_dependency "httparty",       "~> 0.13"
 
-  s.metadata["rubygems_mfa_required"] = "true"
+  s.metadata = {
+    "bug_tracker_uri" => "https://github.com/elektronaut/sendregning/issues",
+    "documentation_uri" => "https://www.rubydoc.info/gems/sendregning",
+    "rubygems_mfa_required" => "true",
+    "source_code_uri" => "https://github.com/elektronaut/sendregning"
+  }
 end

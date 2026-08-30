@@ -1,6 +1,7 @@
-# Sendregning
+[![Version](https://img.shields.io/gem/v/sendregning.svg?style=flat)](https://rubygems.org/gems/sendregning)
+[![Build](https://github.com/elektronaut/sendregning/actions/workflows/build.yml/badge.svg)](https://github.com/elektronaut/sendregning/actions/workflows/build.yml)
 
-[![Code Climate](https://codeclimate.com/github/elektronaut/sendregning.png)](https://codeclimate.com/github/elektronaut/sendregning)
+# Sendregning
 
 Ruby client for the SendRegning Web Service.
 
@@ -44,6 +45,14 @@ Pass `test: true` to the constructor to use the test API
     client = Sendregning::Client.new('my@email.com', 'myawesomepassword', test: true)
 
 
-## Copyright
+## Contributing
 
-Copyright (c) 2010 Inge Jørgensen. See LICENSE for details.
+Bug reports and pull requests are welcome on
+[GitHub](https://github.com/elektronaut/sendregning). See
+[CONTRIBUTING.md](CONTRIBUTING.md) for how to get set up and how
+commits are formatted, and note that this project ships with a
+[code of conduct](CODE_OF_CONDUCT.md).
+
+## License
+
+Released under the [MIT License](LICENSE).
